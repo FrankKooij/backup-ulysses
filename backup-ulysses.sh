@@ -82,27 +82,7 @@ then
 		exit 0
 fi
 
-####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
-#
-# Is Ulysses running? It should be, to make sure we have the latest updates
-#
 
-if [[ "`pgrep -x Ulysses`" == "" ]]
-then
-	# Ulysses is not running, so let's launch it to make sure it updates
-	open --background -a Ulysses && QUIT=yes
-
-	# let's give it a couple minutes to get up to date
-	echo "$NAME: Sleeping 120 seconds at `timestamp`"
-	sleep 120
-	echo "$NAME: Sleep finished at `timestamp`"
-
-else
-
-	# We don't want to quit it if it was already running before we started
-	QUIT='no'
-
-fi
 
 ####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
 #
@@ -114,6 +94,11 @@ fi
 #
 # for March 9th at 4:52pm 
 
+if (( $+commands[xz] ))
+then
+
+	
+
 ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.xz"
 
 tar \
@@ -123,6 +108,24 @@ tar \
 	-c \
 	-f "$ARCHIVE" \
 	"com.soulmen.ulysses3"
+
+
+else
+
+	ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.bz2"
+	
+	tar \
+		--verbose \
+		-y \
+		-c \
+		-f "$ARCHIVE" \
+		"com.soulmen.ulysses3"
+	
+	
+	
+	
+fi
+
 
 EXIT="$?"
 
