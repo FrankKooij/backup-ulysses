@@ -13,12 +13,13 @@ Upon seeing this script, a Ulysses customer support representative stated to me:
 
 ## How to use
 
-The easiest way to use this is to set up a [Keyboard Maestro][http://www.keyboardmaestro.com/main/] macro which runs every time [Ulysses](http://www.ulyssesapp.com/) quits, like so:
+The easiest way to use this is to set up a [Keyboard Maestro](http://www.keyboardmaestro.com/main/) macro which runs every time [Ulysses](http://www.ulyssesapp.com/) quits, like so:
 
 ![](Backup-Ulysses-on-Quit.jpg)
 
-You can download and use [my Keyboard Maestro macro](Backup-Ulysses-on-Quit.kmmacros) if you wish, just 
-be sure to change `/usr/local/scripts/backup-ulysses.sh` to the appropriate path on your Mac.
+You can download and use 
+[my Keyboard Maestro macro](https://raw.githubusercontent.com/tjluoma/backup-ulysses/master/Backup-Ulysses-on-Quit.kmmacros) 
+if you wish, just be sure to change `/usr/local/scripts/backup-ulysses.sh` to the appropriate path on your Mac.
 
 
  
