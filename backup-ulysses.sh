@@ -10,6 +10,11 @@
 	# You will almost certainly want to change this 
 ARCHIVE_DIR='/Volumes/Data/Backups/Ulysses/'
 
+## If you want to just move the backup to your Dropbox folder,
+## just uncomment the next line and set it to the proper path 
+
+# ARCHIVE_DIR=/path/to/Dropbox/Backups/Ulysses/
+
 
 ####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
 #
