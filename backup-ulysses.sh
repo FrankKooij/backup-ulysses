@@ -97,18 +97,15 @@ fi
 if (( $+commands[xz] ))
 then
 
-	
+	ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.xz"
 
-ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.xz"
-
-tar \
-	--options='xz:compression-level=9' \
-	--xz \
-	--verbose \
-	-c \
-	-f "$ARCHIVE" \
-	"com.soulmen.ulysses3"
-
+	tar \
+		--options='xz:compression-level=9' \
+		--xz \
+		--verbose \
+		-c \
+		-f "$ARCHIVE" \
+		"com.soulmen.ulysses3"
 
 else
 
@@ -120,10 +117,7 @@ else
 		-c \
 		-f "$ARCHIVE" \
 		"com.soulmen.ulysses3"
-	
-	
-	
-	
+
 fi
 
 
@@ -170,17 +164,6 @@ else
 	msg "Created $ARCHIVE but failed to move it to $ARCHIVE_DIR"
 fi
 
-
-####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
-#
-#
-#
-
-if [[ "$QUIT" == "yes" ]]
-then
-		# Quit the app IFF we started it
-	osascript -e 'tell application "Ulysses" to quit'
-fi
 
 
 exit 0
