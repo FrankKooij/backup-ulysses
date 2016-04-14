@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Activate</key>
+		<string>Normal</string>
+		<key>CreationDate</key>
+		<real>459387347.72605699</real>
+		<key>IsActive</key>
+		<true/>
+		<key>Macros</key>
+		<array>
+			<dict>
+				<key>Actions</key>
+				<array>
+					<dict>
+						<key>DisplayKind</key>
+						<string>None</string>
+						<key>IncludeStdErr</key>
+						<true/>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>ExecuteShellScript</string>
+						<key>Path</key>
+						<string>/usr/local/scripts/backup-ulysses.sh</string>
+						<key>Text</key>
+						<string>#!/bin/zsh -f
+# Purpose: Make extra Ulysses backups because you're paranoid. No I'm not. Yes you are. Ok, yeah, that's fair.
+#
+#
+# I sent an earlier version of this to the Ulysses developers, and was told:
+# 	"It sounds like the only thing that can harm your texts now is a zombie apocalypse at
+#	 the Dropbox headquarters or the heat death of the universe."
+#
+#
+#
+# From:	Timothy J. Luoma
+# Mail:	luomat at gmail dot com
+# Date:	2016-03-09
+
+
+	# This is where the archives will be saved when finishes
+	# it will be created if it does not exist
+ARCHIVE_DIR="$HOME/Dropbox/Backups/Ulysses/"
+
+
+####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
+#
+#		You should not need to change anything below this line,
+#		although you are welcome to if you know what you are doing.
+#
+####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
+
+
+# short name of this file without path or extension
+NAME="backup-ulysses"
+
+if [ -e "$HOME/.path" ]
+then
+	source "$HOME/.path"
+else
+	PATH='/usr/local/scripts:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin'
+fi
+
+zmodload zsh/datetime
+
+TIME=`strftime "%Y-%m-%d--%H.%M.%S" "$EPOCHSECONDS"`
+
+function timestamp { strftime "%Y-%m-%d--%H.%M.%S" "$EPOCHSECONDS" }
+
+LOG="$HOME/Library/Logs/$NAME.log"
+
+function msg {
+
+	echo "$NAME: $@" | tee -a "$LOG"
+
+		# If growlnotify is installed in $PATH
+		# use it to report messages
+	if (( $+commands[growlnotify] ))
+	then
+
+		growlnotify  \
+			--appIcon "Ulysses" \
+			--identifier "$NAME" \
+			--message "$@" \
+			--title "$NAME"
+	fi
+
+}
+
+
+####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
+#
+# make sure the folder that we want to backup actually exists
+#
+
+cd "$HOME/Library/Containers"
+
+if [ ! -d "com.soulmen.ulysses3" ]
+then
+		msg "No com.soulmen.ulysses3 found in $PWD"
+		exit 0
+fi
+
+
+
+####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
+#
+# This is where we actually create the backup of the folder
+#
+# The filename will be something like this:
+#
+# 	com.soulmen.ulysses3.2016-03-09--16.52.51.tar.xz
+#
+# for March 9th at 4:52pm
+
+if (( $+commands[xz] ))
+then
+
+	ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.xz"
+
+	tar \
+		--options='xz:compression-level=9' \
+		--xz \
+		--verbose \
+		-c \
+		-f "$ARCHIVE" \
+		"com.soulmen.ulysses3"
+
+else
+
+	ARCHIVE="com.soulmen.ulysses3.`timestamp`.tar.bz2"
+
+	tar \
+		--verbose \
+		-y \
+		-c \
+		-f "$ARCHIVE" \
+		"com.soulmen.ulysses3"
+
+fi
+
+
+EXIT="$?"
+
+if [ "$EXIT" != "0" ]
+then
+	msg "tar failed (\$EXIT = $EXIT)"
+
+	exit 0
+fi
+
+
+####|####|####|####|####|####|####|####|####|####|####|####|####|####|####
+##
+##	Move the .tar.xz pr .tar.bz2 file to the 'ARCHIVE_DIR'
+##	which is defined above
+##
+
+
+[[ ! -d "$ARCHIVE_DIR" ]] &amp;&amp; mkdir -p "$ARCHIVE_DIR"
+
+mv "$ARCHIVE" "$ARCHIVE_DIR" 2&gt;&amp;1 | tee -a "$LOG"
+
+EXIT="$?"
+
+if [ "$EXIT" = "0" ]
+then
+	msg "Ran Successfully"
+else
+	msg "FAILED Created $ARCHIVE but failed to move it to $ARCHIVE_DIR"
+fi
+
+
+
+exit 0
+#EOF
+</string>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+						<key>TrimResults</key>
+						<true/>
+						<key>TrimResultsNew</key>
+						<true/>
+						<key>UseText</key>
+						<true/>
+					</dict>
+				</array>
+				<key>CreationDate</key>
+				<real>480060183.58307898</real>
+				<key>IsActive</key>
+				<true/>
+				<key>ModificationDate</key>
+				<real>482322360.98100501</real>
+				<key>Name</key>
+				<string>Backup Ulysses on Quit</string>
+				<key>Triggers</key>
+				<array>
+					<dict>
+						<key>Application</key>
+						<dict>
+							<key>BundleIdentifier</key>
+							<string>com.soulmen.ulysses3</string>
+							<key>Name</key>
+							<string>Ulysses</string>
+							<key>NewFile</key>
+							<string>/Applications/Ulysses.app</string>
+						</dict>
+						<key>FireType2</key>
+						<string>Quit</string>
+						<key>MacroTriggerType</key>
+						<string>Application</string>
+						<key>RepeatTime</key>
+						<integer>60</integer>
+						<key>Target</key>
+						<string>Specific</string>
+					</dict>
+				</array>
+				<key>UID</key>
+				<string>D5F8DF7B-4E68-4859-B2B2-BCA5D1455C81</string>
+			</dict>
+		</array>
+		<key>Name</key>
+		<string>Global Macro Group</string>
+		<key>ToggleMacroUID</key>
+		<string>4948A9C1-5CD3-4AA1-A25D-9D29C5471ED8</string>
+		<key>UID</key>
+		<string>DA8512F7-F323-46B1-8319-752E0495CFD0</string>
+	</dict>
+</array>
+</plist>
